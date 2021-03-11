@@ -22,6 +22,8 @@ import com.cursomc.dto.ClienteDTO;
 import com.cursomc.dto.ClienteNewDTO;
 import com.cursomc.services.ClienteService;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping(value="/clientes")
 public class ClienteResource {
@@ -29,12 +31,14 @@ public class ClienteResource {
 	@Autowired
 	private ClienteService service;
 	
+	@ApiOperation(value = "Busca por id")
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Cliente> find(@PathVariable Integer id) {		
 		Cliente obj = service.find(id);			
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	@ApiOperation(value = "Insere um novo cliente")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto) {
 		Cliente obj = service.fromDTO(objDto);
@@ -43,6 +47,7 @@ public class ClienteResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
+	@ApiOperation(value = "Atualiza um cliente")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO objDto, @PathVariable Integer id) {
 		Cliente obj = service.fromDTO(objDto);
@@ -50,13 +55,15 @@ public class ClienteResource {
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
 	}
-
+	
+	@ApiOperation(value = "Apaga um cliente")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 	
+	@ApiOperation(value = "Busca todos os clientes")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<ClienteDTO>> findAll() {
 		List<Cliente> list = service.findAll();
@@ -64,6 +71,7 @@ public class ClienteResource {
 		return ResponseEntity.ok().body(listDto);
 	}
 	
+	@ApiOperation(value = "Busca todos os clientes por paginação")
 	@RequestMapping(value="/page", method = RequestMethod.GET)
 	public ResponseEntity<Page<ClienteDTO>> findPage(
 			@RequestParam(value = "page", defaultValue="0") Integer page, 
